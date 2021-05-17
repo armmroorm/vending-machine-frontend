@@ -1,13 +1,16 @@
 <template>
   <v-row justify='center' align='center'>
     <v-col>
-      <div>Report Machine</div>
+      <machine-table />
     </v-col>
   </v-row>
 </template>
 
 <script>
+import MachineTable from '~/components/MachineTable'
+
 export default {
+  components: { MachineTable },
   layout: 'admin',
   name: 'reportMachine'
 }

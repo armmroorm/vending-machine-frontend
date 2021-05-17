@@ -78,6 +78,7 @@ export default {
     async getAllMachine() {
       await MainServices.getAllMachine().then(resp => {
         this.machineList = resp.data || []
+        this.checkStock()
       }).catch(err => {
         this.$swal.fire({
           icon: 'error',
@@ -89,6 +90,33 @@ export default {
       this.productList = data
       this.dialog = !this.dialog
     },
+    checkStock() {
+      MainServices.checkStock().then(resp => {
+        if (resp.data) {
+          if (this.$auth.loggedIn) {
+            this.$swal.fire({
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              icon: 'warning',
+              title: 'Nearly out of stock detected',
+              html: 'Click to check, ' + '<a href="http://localhost:3000/admin/machine">links</a>',
+              toast: true,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', this.$swal.stopTimer)
+                toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+              }
+            })
+          }
+        }
+      }).catch(err => {
+        this.$swal.fire({
+          icon: 'error',
+          title: `${err.response.data.message}`
+        })
+      })
+    },
     placeOrder(order) {
       MainServices.placeOrder({
         productId: order.productId,
@@ -99,6 +127,7 @@ export default {
           icon: 'success',
           title: `คำสั่งซื้อสำเร็จ`
         })
+
         this.dialog = !this.dialog
         this.getAllMachine()
       }).catch(err => {
