@@ -21,6 +21,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/sweetalert2.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -36,6 +37,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
@@ -44,6 +46,21 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'http://localhost:8000/admin/signin', method: 'post', propertyName: 'data.tokenKey' },
+          user: false,
+          logout: false
+        }
+      }
+    },
+    redirect: {
+      login: '/admin/signin'
+    }
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
@@ -59,7 +76,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

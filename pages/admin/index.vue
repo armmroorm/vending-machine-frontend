@@ -1,16 +1,19 @@
 <template>
   <v-row justify='center' align='center'>
     <v-col>
-      <Machine />
+      <div>WELCOME ADMIN</div>
     </v-col>
   </v-row>
 </template>
 
 <script>
-
-import Machine from '~/components/Machine'
-
 export default {
-  components: { Machine }
+  layout: 'admin',
+  middleware: 'auth',
+  name: 'index'
 }
 </script>
+
+<style scoped>
+
+</style>
