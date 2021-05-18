@@ -39,6 +39,7 @@
                   <div>{{ item.product_name }}</div>
                   <div class='price'>฿{{ item.price }}</div>
                   <div class='number'>จำนวน : {{ item.number }}</div>
+                  <div class='SoldOut' v-if='item.number <= 0'>Sold out</div>
                 </div>
 
                 <v-card-actions>
@@ -48,6 +49,7 @@
                     dark
                     small
                     color='primary'
+                    :disabled='item.number <= 0'
                     @click='submitOrder(item)'
                   >
                     <v-icon dark>
@@ -123,5 +125,10 @@ export default {
 
 .number {
   color: #AAAAAA;
+}
+
+.SoldOut {
+  color: #AAAAAA;
+  text-decoration: line-through;
 }
 </style>

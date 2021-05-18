@@ -95,7 +95,7 @@ export default {
           })
           console.log(resp)
 
-          if (resp.data.success) {
+          if (resp.status === 200) {
             this.$router.push('/admin')
           }
 
