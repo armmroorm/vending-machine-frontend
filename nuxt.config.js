@@ -45,16 +45,18 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:8000/',
+  },
 
   auth: {
     strategies: {
       local: {
         endpoints: {
-          login: { url: 'http://localhost:8000/admin/signin', method: 'post', propertyName: 'data.tokenKey' },
+          login: { url: '/admin/signin', method: 'post', propertyName: 'tokenKey' },
           user: false,
           logout: false
-        }
+        },
       }
     },
     redirect: {

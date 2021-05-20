@@ -93,7 +93,7 @@ export default {
           const resp = await this.$auth.loginWith('local', {
             data: payload
           })
-          console.log(resp)
+
 
           if (resp.status === 200) {
             this.$router.push('/admin')
