@@ -320,47 +320,26 @@ export default {
   },
   methods: {
     async readData() {
-      await MainServices.getAllMachine().then(resp => {
+      try {
+        const resp = await this.$axios.get('/machine')
         this.machineList = resp.data || []
         this.expand = this.machineList[0].machine_name
-      }).catch(err => {
+      } catch (err) {
         this.$swal.fire({
           icon: 'error',
           title: `${err.response.data.message}`
         })
-      })
-    },
-    createMachine() {
-      if (this.$refs.form.validate()) {
-        let payload = {
-          machineName: this.machine.machine_name,
-          location: this.machine.location,
-          address: this.machine.address
-        }
-        MainServices.createMachine(payload).then(() => {
-          this.$swal.fire({
-            icon: 'success',
-            title: 'News created successfully'
-          })
-          this.dialog = false
-          this.resetData()
-          this.readData()
-        }).catch(err => {
-          this.$swal.fire({
-            icon: 'error',
-            title: `${err.response.data.message}`
-          })
-        })
       }
     },
-    saveMachine() {
+    async createMachine() {
       if (this.$refs.form.validate()) {
         let payload = {
           machineName: this.machine.machine_name,
           location: this.machine.location,
           address: this.machine.address
         }
-        MainServices.updateMachine(this.machine.id, payload).then(() => {
+        try {
+          const resp = await this.$axios.post('/machine', payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -368,12 +347,48 @@ export default {
           this.dialog = false
           this.resetData()
           this.readData()
-        }).catch(err => {
+        } catch (err) {
           this.$swal.fire({
             icon: 'error',
             title: `${err.response.data.message}`
           })
-        })
+
+          if (err.response.status === 401 || 500) {
+            this.refreshToken()
+          }
+        }
+      }
+    },
+    async refreshToken() {
+      await this.$auth.logout()
+      this.$router.push('/admin/signin')
+    },
+    async saveMachine() {
+      if (this.$refs.form.validate()) {
+        let payload = {
+          machineName: this.machine.machine_name,
+          location: this.machine.location,
+          address: this.machine.address
+        }
+        try {
+          const resp = await this.$axios.put(`/machine/${this.machine.id}`, payload)
+          this.$swal.fire({
+            icon: 'success',
+            title: 'News created successfully'
+          })
+          this.dialog = false
+          this.resetData()
+          this.readData()
+        } catch (err) {
+          this.$swal.fire({
+            icon: 'error',
+            title: `${err.response.data.message}`
+          })
+
+          if (err.response.status === 401 || 500) {
+            this.refreshToken()
+          }
+        }
       }
     },
     addMachine() {
@@ -400,13 +415,12 @@ export default {
       }
     },
     editProduct(product) {
-      console.log(product)
       this.modal = 'edit'
       this.activeItem = 'Edit Product'
       this.product = product
       this.dialog1 = true
     },
-    createProduct() {
+    async createProduct() {
       if (this.$refs.formProduct.validate()) {
         let payload = {
           productName: this.product.product_name,
@@ -414,7 +428,8 @@ export default {
           number: parseInt(this.product.number),
           machineId: parseInt(this.product.machine_id)
         }
-        MainServices.createProduct(payload).then(() => {
+        try {
+          const resp = await this.$axios.post('/product', payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -422,15 +437,19 @@ export default {
           this.dialog1 = false
           this.resetData()
           this.readData()
-        }).catch(err => {
+        } catch (err) {
           this.$swal.fire({
             icon: 'error',
             title: `${err.response.data.message}`
           })
-        })
+
+          if (err.response.status === 401 || 500) {
+            this.refreshToken()
+          }
+        }
       }
     },
-    updateProduct() {
+    async updateProduct() {
       if (this.$refs.formProduct.validate()) {
         let payload = {
           productName: this.product.product_name,
@@ -438,7 +457,8 @@ export default {
           number: parseInt(this.product.number),
           machineId: parseInt(this.product.machine_id)
         }
-        MainServices.updateProduct(this.product.id, payload).then(() => {
+        try {
+          const resp = await this.$axios.put(`/product/${this.product.id}`, payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -446,12 +466,16 @@ export default {
           this.dialog1 = false
           this.resetData()
           this.readData()
-        }).catch(err => {
+        } catch (err) {
           this.$swal.fire({
             icon: 'error',
             title: `${err.response.data.message}`
           })
-        })
+
+          if (err.response.status === 401 || 500) {
+            this.refreshToken()
+          }
+        }
       }
     },
     resetData() {

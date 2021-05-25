@@ -76,22 +76,24 @@ export default {
   },
   methods: {
     async getAllMachine() {
-      await MainServices.getAllMachine().then(resp => {
+      try {
+        const resp = await this.$axios.get('/machine')
         this.machineList = resp.data || []
         this.checkStock()
-      }).catch(err => {
+      } catch (err) {
         this.$swal.fire({
           icon: 'error',
           title: `${err.response.data.message}`
         })
-      })
+      }
     },
     toggleMachine(data) {
       this.productList = data
       this.dialog = !this.dialog
     },
-    checkStock() {
-      MainServices.checkStock().then(resp => {
+    async checkStock() {
+      try {
+        const resp = await this.$axios.get('/product/checkStock')
         if (resp.data) {
           if (this.$auth.loggedIn) {
             this.$swal.fire({
@@ -110,19 +112,21 @@ export default {
             })
           }
         }
-      }).catch(err => {
+      } catch (err) {
         this.$swal.fire({
           icon: 'error',
           title: `${err.response.data.message}`
         })
-      })
+      }
     },
-    placeOrder(order) {
-      MainServices.placeOrder({
-        productId: order.productId,
-        totalPrice: order.totalPrice,
-        totalNumber: order.totalNumber
-      }).then(resp => {
+    async placeOrder(order) {
+      try {
+        await this.$axios.post('/orders/placeOrder', {
+          productId: order.productId,
+          totalPrice: order.totalPrice,
+          totalNumber: order.totalNumber
+        })
+
         this.$swal.fire({
           icon: 'success',
           title: `คำสั่งซื้อสำเร็จ`
@@ -130,12 +134,12 @@ export default {
 
         this.dialog = !this.dialog
         this.getAllMachine()
-      }).catch(err => {
+      } catch (err) {
         this.$swal.fire({
           icon: 'error',
           title: `${err.response.data.message}`
         })
-      })
+      }
     }
   }
 }

@@ -16,12 +16,13 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/sweetalert2.js'
+
+    { src: '~/plugins/sweetalert2.js' },
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -30,7 +31,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -41,12 +42,12 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
-    '@nuxt/content',
+    '@nuxt/content'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:8000/',
+    baseURL: 'http://localhost:8000/'
   },
 
   auth: {
@@ -56,7 +57,7 @@ export default {
           login: { url: '/admin/signin', method: 'post', propertyName: 'tokenKey' },
           user: false,
           logout: false
-        },
+        }
       }
     },
     redirect: {
@@ -94,6 +95,5 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+  build: {}
 }
