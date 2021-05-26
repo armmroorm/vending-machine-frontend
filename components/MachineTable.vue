@@ -321,7 +321,7 @@ export default {
   methods: {
     async readData() {
       try {
-        const resp = await this.$axios.get('/machine')
+        const resp = await MainServices.getAllMachine()
         this.machineList = resp.data || []
         this.expand = this.machineList[0].machine_name
       } catch (err) {
@@ -339,7 +339,7 @@ export default {
           address: this.machine.address
         }
         try {
-          const resp = await this.$axios.post('/machine', payload)
+          await MainServices.createMachine(payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -371,7 +371,7 @@ export default {
           address: this.machine.address
         }
         try {
-          const resp = await this.$axios.put(`/machine/${this.machine.id}`, payload)
+          await MainServices.updateMachine(this.machine.id, payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -429,7 +429,7 @@ export default {
           machineId: parseInt(this.product.machine_id)
         }
         try {
-          const resp = await this.$axios.post('/product', payload)
+          await MainServices.createProduct(payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -458,7 +458,7 @@ export default {
           machineId: parseInt(this.product.machine_id)
         }
         try {
-          const resp = await this.$axios.put(`/product/${this.product.id}`, payload)
+          await MainServices.updateProduct(this.product.id, payload)
           this.$swal.fire({
             icon: 'success',
             title: 'News created successfully'
@@ -495,11 +495,11 @@ export default {
     },
     close() {
       this.dialog = !this.dialog
-      this.resetData()
+      // this.resetData()
     },
     closeProduct() {
       this.dialog1 = !this.dialog1
-      this.resetData()
+      // this.resetData()
     },
     getColor(quantity) {
       if (quantity <= 10) return 'red'

@@ -77,7 +77,7 @@ export default {
   methods: {
     async getAllMachine() {
       try {
-        const resp = await this.$axios.get('/machine')
+        const resp = await MainServices.getAllMachine()
         this.machineList = resp.data || []
         this.checkStock()
       } catch (err) {
@@ -93,7 +93,7 @@ export default {
     },
     async checkStock() {
       try {
-        const resp = await this.$axios.get('/product/checkStock')
+        const resp = await MainServices.checkStock()
         if (resp.data) {
           if (this.$auth.loggedIn) {
             this.$swal.fire({
@@ -121,7 +121,7 @@ export default {
     },
     async placeOrder(order) {
       try {
-        await this.$axios.post('/orders/placeOrder', {
+        await MainServices.placeOrder({
           productId: order.productId,
           totalPrice: order.totalPrice,
           totalNumber: order.totalNumber
